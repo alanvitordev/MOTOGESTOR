@@ -1,0 +1,16 @@
+# Ignorar pastas de compilação
+bin/
+build/
+dist/
+nbproject/private/
+
+# Ignorar configurações locais do VS Code
+.vscode/launch.json
+.vscode/tasks.json
+
+# Arquivos temporários
+*.log
+Thumbs.db
+
+# Arquivo de configuração local
+db.properties
