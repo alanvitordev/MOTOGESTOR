@@ -1,10 +1,10 @@
-# Ignorar pastas de compilação
+# Pastas de compilação
 bin/
 build/
 dist/
 nbproject/private/
 
-# Ignorar configurações locais do VS Code
+# Configurações locais
 .vscode/launch.json
 .vscode/tasks.json
 
@@ -15,8 +15,7 @@ Thumbs.db
 # Arquivo de configuração local
 db.properties
 
-# Ignorar arquivos compilados individuais (caso alguém compile via terminal)
+# Ignorar arquivos compilados individuais
 *.class
 
-# Se você usa Mac em algum momento, evite esses arquivos de sistema
 .DS_Store
