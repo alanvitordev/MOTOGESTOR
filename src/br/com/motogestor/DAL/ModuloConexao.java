@@ -36,32 +36,34 @@ import java.util.Properties;
 public class ModuloConexao {
 
     public static Connection conector() {
+
         Properties props = new Properties();
         Connection conexao = null;
         String driver = "com.mysql.cj.jdbc.Driver";
 
-        try {
-           
-            FileInputStream fis = new FileInputStream("db.properties");
-            props.load(fis);
+       try (FileInputStream fis = new FileInputStream("db.properties")) { // O arquivo fecha sozinho aqui
 
-            
-            Class.forName(driver);
+    props.load(fis);
+    Class.forName(driver);
 
-           
-            conexao = DriverManager.getConnection(
-                props.getProperty("db.url"), 
-                props.getProperty("db.user"), 
-                props.getProperty("db.password")
-            );
+    conexao = DriverManager.getConnection(
 
-            System.out.println("Conexão estabelecida com sucesso!");
-            return conexao;
+        props.getProperty("db.url"), 
+        props.getProperty("db.user"), 
+        props.getProperty("db.password")
+    );
 
-        } catch (Exception e) {
-            
-            System.out.println("Erro na conexão ou no arquivo de propriedades: " + e);
-            return null;
-        }
+    System.out.println("Conexão estabelecida com sucesso!");
+
+    return conexao;
+
+} catch (Exception e) {
+
+    System.out.println("Erro na conexão ou no arquivo de propriedades: " + e);
+
+    return null;
+}
+
     }
+
 }
