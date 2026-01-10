@@ -84,8 +84,8 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
             String senhaCriptografada = CriptografiaUtil.criptografar(senha);
             pst.setString(4, senhaCriptografada);
 
-            //o combo box está sendo convertido para string... (seu comentário original)
-            //com o .toString(); (seu comentário original)
+            //o combo box está sendo convertido para string...
+            //com o .toString();
             pst.setString(5, perfilStr);
 
             //a estrutura abaixo é usada para confirmar a inserção de dados na tabela do sql.
@@ -287,7 +287,7 @@ public class TelaUsuario extends javax.swing.JInternalFrame {
     private void inativarUsuario() {
 
         int inativacao = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja INATIVAR este usuário?",
-                "Atenção", JOptionPane.YES_NO_CANCEL_OPTION);
+                "Atenção", JOptionPane.YES_NO_OPTION);
 
         if (inativacao == JOptionPane.YES_OPTION) {
 
