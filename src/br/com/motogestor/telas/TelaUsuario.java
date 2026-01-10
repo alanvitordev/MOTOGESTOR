@@ -1,8 +1,6 @@
 
 package br.com.motogestor.telas;
 
-//AULA 13 - JOSE DE ASSIS (CRUD)
-
 //Reutiliza-se algumas coisas da JForm (Painel) da TelaLogin.
 
 import java.sql.*;
