@@ -186,6 +186,34 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 return; // Para o método
             }
 
+            String sql_verifica_dados = "select cliente, endereco, telefone from tbclientes where idcli = ?";
+            
+         PreparedStatement pst_verifica_dados = conexao.prepareStatement (sql_verifica_dados);
+    
+         pst_verifica_dados.setInt(1, idCli);
+    
+         ResultSet rs_verifica_dados = pst_verifica_dados.executeQuery();
+    
+    
+    if (rs_verifica_dados.next()) {
+        
+        String clienteCadastrado = rs_verifica_dados.getString("cliente");
+        
+        String enderecoCadastrado = rs_verifica_dados.getString("endereco");
+        
+        String telefoneCadastrado = rs_verifica_dados.getString("telefone");    
+    
+        String telefoneFormatado = txtCliFone.getText().replaceAll("[^0-9]", "");
+        
+        if (nomeCli.equals (clienteCadastrado) && enderecoCli.equals(enderecoCadastrado) && telefoneFormatado.equals (telefoneCadastrado)) {
+        
+        JOptionPane.showMessageDialog(null, "Dados já cadastrados, altere algum campo e tente novamente!");
+            return;
+
+               }
+
+           }   
+            
             pst = conexao.prepareStatement(sql_alterar);
             pst.setString(1, nomeCli);
             pst.setString(2, enderecoCli);
