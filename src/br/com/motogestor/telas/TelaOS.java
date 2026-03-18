@@ -603,6 +603,102 @@ public class TelaOS extends javax.swing.JInternalFrame {
                 }
             }
 
+             int idOSGerada = Integer.parseInt(txtOs.getText().trim());
+
+            if (rs.next()) {
+
+                idOSGerada = rs.getInt(1);
+                txtOs.setText(String.valueOf(idOSGerada));
+            }
+            
+         boolean cabecalhoAlterou = false;
+         
+         String sql_verifica_dados = "select tipo, situacao, motocicleta, placa, defeito, tecnico, valor from tbos where os =?";
+         
+         
+         try (PreparedStatement pst_verifica_dados = conexao.prepareStatement(sql_verifica_dados)) {
+             
+             pst_verifica_dados.setInt(1,idOSGerada);
+             
+             try (ResultSet rs_verifica_dados = pst_verifica_dados.executeQuery()){
+                 
+                 if (rs_verifica_dados.next()) {
+                     
+                
+                 
+                 if (!rs_verifica_dados.getString ("tipo").equals(tipo)
+                        || !rs_verifica_dados.getString ("situacao").equals(cboOsSit.getSelectedItem().toString())
+                        || !rs_verifica_dados.getString("placa").equals(txtPlaca.getText().trim())
+                        || !rs_verifica_dados.getString("defeito").equals(txtOsDef.getText().trim()) 
+                        || !rs_verifica_dados.getString("tecnico").equals(txtOsResp.getText().trim())     
+                        || rs_verifica_dados.getDouble("valor") != Double.parseDouble(txtOsValor.getText().replace(",", ".").trim())) {
+                     
+                     cabecalhoAlterou = true;
+                     
+                 }
+                 
+             }
+         }
+             
+     }
+         
+         boolean pecasMudaram = !mapAntigos.equals(mapNovos);
+         
+         
+         boolean servicosMudaram = false;
+         
+         
+         Map <String, Double> mapServAntigos = new java.util.HashMap<>();
+         
+         Map <String, Double> mapServNovos = new java.util.HashMap<>();
+         
+         
+         String sqlBuscaServ = "select descricao, valor from tbos_servicos where os_id = ?";
+         
+         try (PreparedStatement pstServ = conexao.prepareStatement(sqlBuscaServ)) {
+             
+             pstServ.setInt(1, idOSGerada);
+             
+         try (ResultSet rsServ = pstServ.executeQuery()) {
+             
+             while (rsServ.next()) {
+                 
+                 mapServAntigos.put(rsServ.getString("descricao"), rsServ.getDouble("valor"));
+                 
+                 
+             }
+         }    
+      }
+         
+         DefaultTableModel modelServValidacao = (DefaultTableModel) tblServicosOS.getModel();
+         
+         
+         for (int i = 0; i < modelServValidacao.getRowCount(); i++) {
+             
+             Object servObj = modelServValidacao.getValueAt(i, 0);
+             Object valObj = modelServValidacao.getValueAt(i, 1);
+             
+             if (servObj != null) {
+                 
+                 mapServNovos.put(servObj.toString(), Double.parseDouble(valObj.toString()));
+                 
+             }
+         }
+            
+            servicosMudaram = !mapServAntigos.equals(mapServNovos);
+         
+         if (!cabecalhoAlterou && !pecasMudaram && !servicosMudaram) {
+             
+             
+             JOptionPane.showMessageDialog(null, "Dados já cadastrados, altere algum campo e tente novamente!");
+             
+             
+             conexao.rollback();
+             conexao.setAutoCommit(true);
+           
+             return;
+         }
+            
             pst = conexao.prepareStatement(sql);
             pst.setString(1, tipo);
             pst.setString(2, cboOsSit.getSelectedItem().toString());
@@ -629,6 +725,7 @@ public class TelaOS extends javax.swing.JInternalFrame {
 
                 conexao.rollback();
                 JOptionPane.showMessageDialog(null, "Erro ao atualizar OS. Operação cancelada.");
+                
                 conexao.setAutoCommit(true);
                 return;
             }
